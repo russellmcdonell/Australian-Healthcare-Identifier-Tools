@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Generate Medicare PBS Prescriber Numbers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body onload="makeMedicarePrescriberNumbers()">
+<h1>Generate Medicare PBS Prescriber Numbers</h1>
+
+
+<table>
+	<tr><th>Medicare PBS Prescriber Number</th><tr>
+	<tr><td id="0"></td><tr>
+	<tr><td id="1"></td><tr>
+	<tr><td id="2"></td><tr>
+	<tr><td id="3"></td><tr>
+	<tr><td id="4"></td><tr>
+	<tr><td id="5"></td><tr>
+	<tr><td id="6"></td><tr>
+	<tr><td id="7"></td><tr>
+	<tr><td id="8"></td><tr>
+	<tr><td id="9"></td><tr>
+</table>
+
+<script>
+
+
+var cdigit = '0123456789';
+function makeMedicarePrescriberNumbers() {
+	for (var i = 0; i < 10; i++) {
+		var medicareNumber = Math.random() * 1000000;
+		medicareNumber = Math.trunc(medicareNumber);
+		while (medicareNumber < 10000) {
+			medicareNumber = Math.random() * 1000000;
+			medicareNumber = Math.trunc(medicareNumber);
+		}
+		var medicareString = medicareNumber.toString();
+		medicareString = "0000000" + medicareString;
+		medicareString = medicareString.slice(-6);
+		var csum = 0;
+		if (medicareString.substring(0, 1) == "0") {
+			csum = parseInt(medicareString.substring(1, 2)) * 5;
+			csum += parseInt(medicareString.substring(2, 3)) * 8;
+			csum += parseInt(medicareString.substring(3, 4)) * 4;
+			csum += parseInt(medicareString.substring(4, 5)) * 2;
+			csum += parseInt(medicareString.substring(5, 6));
+			csum %= 11;
+			csum %= 10;
+		} else {
+			csum = parseInt(medicareString.substring(0, 1));
+			csum += parseInt(medicareString.substring(1, 2)) * 3;
+			csum += parseInt(medicareString.substring(2, 3)) * 7;
+			csum += parseInt(medicareString.substring(3, 4)) * 9;
+			csum += parseInt(medicareString.substring(4, 5));
+			csum += parseInt(medicareString.substring(5, 6)) * 3;
+			csum %= 10;
+		}
+		medicareString += cdigit.substring(csum, csum + 1);
+		var id = i.toString();
+		document.getElementById(id).innerHTML = medicareString;
+
+	}
+}
+
+
+</script>
+
+</body>
+</html>

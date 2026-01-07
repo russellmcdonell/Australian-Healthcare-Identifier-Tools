@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate a Patient Medicare Card Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate a Patient Medicare Card Number</h1>
+
+<h3>Enter a Patient Medicare Card number, then hit Submit to get it validated</h3>
+<h4>Can be 11 digits, or 10 digit/1 digit</h4>
+<form name="PatientMedicareCardNumberForm" >
+	<label for="formInput">Patient Medicare Card Number:</label><input type="text" id="formInput" name="patientMedicareCardNumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateMedicareForm()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+function checkPatientMedicareCardNumber(patientMedicareCardNumber) {
+	if (patientMedicareCardNumber.length < 11) {					// check length
+		return "Not enough characters";
+	}
+	if (patientMedicareCardNumber.length > 12) {					// check length
+		return "Too many characters";
+	}
+	if (patientMedicareCardNumber.length == 12) {					// check length
+		if (patientMedicareCardNumber[10] != "/") {
+			return "12 characters, but missing '/'";
+		}
+	}
+	var root = parseInt(patientMedicareCardNumber.substring(0, 10));
+	if (Number.isNaN(Number(root))) {						// check starts with 10 digits
+		return "Medicare Care number is not a number";
+	}
+	var irn = parseInt(patientMedicareCardNumber.slice(-1));
+	if (Number.isNaN(irn)) {							// check ends with 1 digits
+		return "Individual Record Number is not a number";
+	}
+	var issueState = parseInt(patientMedicareCardNumber.substring(0, 1));
+	if (issueState < 2) {								// check valid issue State
+		return "Invalid State of issues (first digit)";
+	}
+	if (issueState > 6) {								// check valid issue State
+		return "Invalid State of issues (first digit)";
+	}
+	var checkSum = parseInt(patientMedicareCardNumber.substring(0, 1));
+	checkSum += parseInt(patientMedicareCardNumber.substring(1, 2)) * 3;
+	checkSum += parseInt(patientMedicareCardNumber.substring(2, 3)) * 7;
+	checkSum += parseInt(patientMedicareCardNumber.substring(3, 4)) * 9;
+	checkSum += parseInt(patientMedicareCardNumber.substring(4, 5));
+	checkSum += parseInt(patientMedicareCardNumber.substring(5, 6)) * 3;
+	checkSum += parseInt(patientMedicareCardNumber.substring(6, 7)) * 7;
+	checkSum += parseInt(patientMedicareCardNumber.substring(7, 8)) * 9;
+	checkSum %= 10;
+	if (checkSum != parseInt(patientMedicareCardNumber.substring(8, 9))) {
+		return "Invalid checksum digit";
+	}
+	return "";
+}
+
+
+function validateMedicareForm() {
+	var patientMedicareCardNumber = document.forms["PatientMedicareCardNumberForm"]["patientMedicareCardNumber"].value;
+	var valid = checkPatientMedicareCardNumber(patientMedicareCardNumber);
+	if (valid == "") {
+		document.getElementById("validation").innerHTML = "Is Valid";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

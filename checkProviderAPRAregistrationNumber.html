@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate a Provider APRA Registration Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate a Provider APRA Registration Number</h1>
+
+<h3>Enter a Provider APRA Registration Number, then hit Submit to get it validated</h3>
+<form name="ProviderAPRAnumberForm" >
+	<label for="formInput">Provider APRA Registration Number:</label><input type="text" id="formInput" name="providerAPRAnumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateAPRAForm()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+const APRAprofession = {
+	ATS: "ATSI Health Practice",
+	CMR: "Chinese Medicine",
+	CHI: "Chiropractic",
+	DEN: "Dental",
+	MED: "Medical",
+	MRP: "Medical Radiation Practice",
+	NMW: "Nursing and Midwifery",
+	OCC: "Occupational Therapy",
+	OPT: "Optometry",
+	OST: "Osteopathy",
+	PHA: "Pharmacy",
+	PHY: "Physiotherapy",
+	POD: "Podiatry",
+	PSY: "Psychology"
+};
+const APRAprofessionKey = Object.keys(APRAprofession);
+function checkProviderAPRAnumber(providerAPRAnumber) {
+	if (providerAPRAnumber.length < 13) {					// check length
+		return "Not enough characters";
+	}
+	if (providerAPRAnumber.length > 13) {					// check length
+		return "Too many characters";
+	}
+	if (Number.isNaN(Number(providerAPRAnumber.substring(3, 14)))) {	// check ends with 10 digits
+		return "APRA Registration number is not a number";
+	}
+	if (!APRAprofessionKey.includes(providerAPRAnumber.substring(0, 3))) {
+		return "Invalid APRA Health Profession Code";
+	}
+	return "";
+}
+
+
+function validateAPRAForm() {
+	var providerAPRAnumber = document.forms["ProviderAPRAnumberForm"]["providerAPRAnumber"].value;
+	var valid = checkProviderAPRAnumber(providerAPRAnumber);
+	if (valid == "") {
+		var code = providerAPRAnumber.substring(0, 3);
+		document.getElementById("validation").innerHTML = "Is Valid APRA " + APRAprofession[code] + " Number";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

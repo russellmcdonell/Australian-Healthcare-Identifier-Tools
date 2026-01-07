@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Generate Hospital PBS Provider Numbers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body onload="makeHospitalProviderNumbers()">
+<h1>Generate Hospital PBS Provider Numbers</h1>
+
+
+<table>
+	<tr><th>Hospital PBS Provider Number</th><tr>
+	<tr><td id="0"></td><tr>
+	<tr><td id="1"></td><tr>
+	<tr><td id="2"></td><tr>
+	<tr><td id="3"></td><tr>
+	<tr><td id="4"></td><tr>
+	<tr><td id="5"></td><tr>
+	<tr><td id="6"></td><tr>
+	<tr><td id="7"></td><tr>
+	<tr><td id="8"></td><tr>
+	<tr><td id="9"></td><tr>
+</table>
+
+<script>
+
+
+var cletter = 'YXWTLKJGHBA';
+function makeHospitalProviderNumbers() {
+	for (var i = 0; i < 10; i++) {
+		hospitalNumber = Math.random() * 1000000;
+		hospitalNumber = Math.trunc(hospitalNumber);
+		var hospitalString = hospitalNumber.toString();
+		hospitalString = "0000000" + hospitalString;
+		hospitalString = "0" + hospitalString.slice(-6);
+		var csum = 0;
+		csum = parseInt(hospitalString.substring(1, 2)) * 5;
+		csum += parseInt(hospitalString.substring(2, 3)) * 8;
+		csum += parseInt(hospitalString.substring(3, 4)) * 4;
+		csum += parseInt(hospitalString.substring(4, 5)) * 2;
+		csum += parseInt(hospitalString.substring(5, 6));
+		csum += parseInt(hospitalString.substring(6, 7)) * 6;
+		csum = csum % 11;
+		hospitalString += cletter.substring(csum, csum + 1);
+		var id = i.toString();
+		document.getElementById(id).innerHTML = hospitalString;
+
+	}
+}
+
+
+</script>
+
+</body>
+</html>

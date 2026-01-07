@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate a Medicare Provider Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate a Medicare Provider Number</h1>
+
+<h3>Enter a Medicare Provider number, then hit Submit to get it validated</h3>
+<form name="MedicareProviderNumberForm" >
+	<label for="formInput">Medicare Provider Number:</label><input type="text" id="formInput" name="medicareProviderNumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateMedicareForm()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+var checkCharacters = "YXWTLKJHFBA";
+var locationCharacters = "0123456789ABCDEFGHJKLMNPQRTUVWXY";
+function checkMedicareProviderNumber(medicareProviderNumber) {
+	if (medicareProviderNumber.length < 8) {		// check length
+		return "Not enough characters";
+	}
+	var checkSumAt = checkCharacters.search(medicareProviderNumber.substring(7, 8));
+	if (checkSumAt == -1) {								// check valid checksum character
+		return "Invalid Checksum character";
+	}
+	var locationAt = locationCharacters.search(medicareProviderNumber.substring(6, 7));
+	if (locationAt == -1) {								// check valid location character
+		return "Invalid Location character";
+	}
+	var root = parseInt(medicareProviderNumber.substring(0, 6));
+	if (Number.isNaN(Number(root))) {					// check starts with 6 digits
+		return "Provider Number is not a  number";
+	}
+	var checkSum = parseInt(medicareProviderNumber.substring(0, 1)) * 3;
+	checkSum += parseInt(medicareProviderNumber.substring(1, 2)) * 5;
+	checkSum += parseInt(medicareProviderNumber.substring(2, 3)) * 8;
+	checkSum += parseInt(medicareProviderNumber.substring(3, 4)) * 4;
+	checkSum += parseInt(medicareProviderNumber.substring(4, 5)) * 2;
+	checkSum += parseInt(medicareProviderNumber.substring(5, 6));
+	checkSum += locationAt * 6;
+	checkSum %= 11;
+	if (checkSum != checkSumAt) {
+		return "Invalid checksum";
+	}
+	return "";
+}
+
+
+function validateMedicareForm() {
+	document.getElementById("validation").innerHTML = "Called";
+	var medicareProviderNumber = document.forms["MedicareProviderNumberForm"]["medicareProviderNumber"].value;
+	var valid = checkMedicareProviderNumber(medicareProviderNumber);
+	if (valid == "") {
+		document.getElementById("validation").innerHTML = "Is Valid";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

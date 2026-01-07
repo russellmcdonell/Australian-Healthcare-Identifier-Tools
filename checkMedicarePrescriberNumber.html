@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate a Medicare PBS Prescriber Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate a Medicare PBS Prescriber Number</h1>
+
+<h3>Enter a Medicare PBS Prescriber number, then hit Submit to get it validated</h3>
+<form name="MedicarePrescriberNumberForm" >
+	<label for="formInput">Medicare PBS Prescriber Number:</label><input type="text" id="formInput" name="medicarePrescriberNumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateMedicareForm()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+var cdigit = '0123456789';
+function checkMedicarePrescriberNumber(medicarePrescriberNumber) {
+	var csum = 0;
+	if (medicarePrescriberNumber.length < 6) {					// check length
+		return "Not enough characters";
+	}
+	if (medicarePrescriberNumber.length > 7) {					// check length
+		return "Too many characters";
+	}
+	if (Number.isNaN(Number(medicarePrescriberNumber))) {				// check starts with 10 digits
+		return "Medicare PBS Prescriber number is not a number";
+	}
+	if (medicarePrescriberNumber.length == 6) {
+		medicarePrescriberNumber = "0" + medicarePrescriberNumber;
+	}
+	if (medicarePrescriberNumber.substring(0, 1) == "0") {
+		csum = parseInt(medicarePrescriberNumber.substring(1, 2)) * 5;
+		csum += parseInt(medicarePrescriberNumber.substring(2, 3)) * 8;
+		csum += parseInt(medicarePrescriberNumber.substring(3, 4)) * 4;
+		csum += parseInt(medicarePrescriberNumber.substring(4, 5)) * 2;
+		csum += parseInt(medicarePrescriberNumber.substring(5, 6));
+		csum %= 11;
+		csum %= 10;
+	} else {
+		csum = parseInt(medicarePrescriberNumber.substring(0, 1));
+		csum += parseInt(medicarePrescriberNumber.substring(1, 2)) * 3;
+		csum += parseInt(medicarePrescriberNumber.substring(2, 3)) * 7;
+		csum += parseInt(medicarePrescriberNumber.substring(3, 4)) * 9;
+		csum += parseInt(medicarePrescriberNumber.substring(4, 5));
+		csum += parseInt(medicarePrescriberNumber.substring(5, 6)) * 3;
+		csum %= 10;
+	}
+	if (cdigit.substring(csum, csum + 1) != medicarePrescriberNumber.substring(6,7)) {
+		return "Invalid checksum digit";
+	}
+	return "";
+}
+
+
+function validateMedicareForm() {
+	document.getElementById("validation").innerHTML = "Called";
+	var medicarePrescriberNumber = document.forms["MedicarePrescriberNumberForm"]["medicarePrescriberNumber"].value;
+	var valid = checkMedicarePrescriberNumber(medicarePrescriberNumber);
+	if (valid == "") {
+		document.getElementById("validation").innerHTML = "Is Valid";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate a Patient DVA Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate a Patient DVA Number</h1>
+
+<h3>Enter a Patient DVA number, then hit Submit to get it validated</h3>
+<h4>Can be 11 digits, or 10 digit/1 digit</h4>
+<form name="PatientDVAnumberForm" >
+	<label for="formInput">Patient DVA Number:</label><input type="text" id="formInput" name="patientDVAnumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateDVAform()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+const states = "NVQWST";
+const war1 = ["A", "N", "P", "V", "X"];
+const war2 = ["CN", "ET", "FR", "FW", "GR", "GW", "IQ", "IT", "IV", "JA", "KM", "KO", "MO", "NF", "NG", "NK", "NX", "PK", "PO", "PX", "RD", "RM", "RU", "SA", "SE", "SL", "SM", "SO", "SR", "SS", "UB", "US", "YU"];
+const war3 = ["AFG", "AGX", "ALX", "ARG", "ARX", "BAG", "BAL", "BCG", "BGG", "BGK", "BGX", "BRX", "BUG", "BUR", "BUX", "CAM", "CCG", "CHX", "CIX", "CLK", "CNK", "CNS", "CNX", "CON", "CYP", "CZG", "CZX", "DEG", "DNK", "DNX", "EGG", "EGX", "EGY", "ESX", "ETK", "ETX", "FIJ", "FIX", "FRG", "FRK", "FRX", "GHA", "GRE", "GRG", "GRK", "GRX", "HKS", "HKX", "HLG", "HLK", "HLX", "HUX", "IDA", "IND", "ISR", "ITG", "ITK", "ITX", "KOS", "KSH", "KUG", "KYA", "LAX", "LBX", "LXK", "MAL", "MAR", "MAU", "MLS", "MOG", "MTX", "MWI", "NBA", "NCG", "NGR", "NIG", "NRD", "NSM", "NSS", "NSW", "NWG", "NWK", "NWX", "OMG", "PAD", "PAG", "PAL", "PAM", "PAX", "PCA", "PCG", "PCR", "PCV", "PHK", "PHS", "PHX", "PLG", "PLX", "PMS", "PSM", "PSW", "PWO", "QAG", "RDX", "RUG", "RUX", "SAG", "SAX", "SCG", "SEG", "SIN", "SPG", "SUD", "SWK", "SWP", "SYG", "SYR", "SYX", "THK", "THS", "TRG", "TRK", "TZA", "UAG", "URX", "USG", "USK", "USS", "USX", "VEX", "VNS", "YEM", "YGX", "ZIM"];
+function checkPatientDVAnumber(patientDVAnumber) {
+	if (patientDVAnumber.length < 8) {					// check length
+		return "Not enough characters";
+	}
+	if (patientDVAnumber.length > 9) {					// check length
+		return "Too many characters";
+	}
+	if (!states.includes(patientDVAnumber.substr(0, 1))) {
+		return "Invalid initial character for state";
+	}
+	if (war3.includes(patientDVAnumber.substr(1, 3))) {
+		if (Number.isNaN(Number(patientDVAnumber.substr(4, 4)))) {						// check starts with 10 digits
+			return "DVA Card number is not a number";
+		}
+	} else if (war2.includes(patientDVAnumber.substr(1, 2))) {
+		if (Number.isNaN(Number(patientDVAnumber.substr(3, 5)))) {						// check starts with 10 digits
+			return "DVA Card number is not a number";
+		}
+	} else if (war1.includes(patientDVAnumber.substr(1, 1))) {
+		if (Number.isNaN(Number(patientDVAnumber.substr(2, 6)))) {						// check starts with 10 digits
+			return "DVA Card number is not a number";
+		}
+	} else {
+		return "Invalid War Code";
+	}
+	return "";
+}
+
+
+function validateDVAform() {
+	var patientDVAnumber = document.forms["PatientDVAnumberForm"]["patientDVAnumber"].value;
+	var valid = checkPatientDVAnumber(patientDVAnumber);
+	if (valid == "") {
+		document.getElementById("validation").innerHTML = "Is Valid";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

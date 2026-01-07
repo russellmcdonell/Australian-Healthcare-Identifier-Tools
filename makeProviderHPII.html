@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Generate Provider HPI-I Numbers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body onload="makeProviderHPIInumbers()">
+<h1>Generate Provider HPI-I Numbers</h1>
+
+<table>
+	<tr><th>Provider HPI-I Numbers</th></tr>
+	<tr><td id="0"></td></tr>
+	<tr><td id="1"></td></tr>
+	<tr><td id="2"></td></tr>
+	<tr><td id="3"></td></tr>
+	<tr><td id="4"></td></tr>
+	<tr><td id="5"></td></tr>
+	<tr><td id="6"></td></tr>
+	<tr><td id="7"></td></tr>
+	<tr><td id="8"></td></tr>
+	<tr><td id="9"></td></tr>
+</table>
+
+<script>
+
+
+function makeProviderHPIInumbers() {
+	for (var id = 0; id < 10; id++) {
+		var HPIIstring = "80036199";
+		var HPIInumber = Math.random() * 10000000;
+		HPIInumber = Math.trunc(HPIInumber);
+		var numberString = "0000000" + HPIInumber.toString();
+		HPIIstring += numberString.slice(-7);
+		var thisSum = 0;
+		for(var i = 14; i > -1; i -= 2) {
+			digit = parseInt(HPIIstring.substring(i, i + 1)) * 2;
+			thisSum += Math.trunc(digit / 10);
+			thisSum += digit  % 10;
+		}
+		for(var i = 13; i > -1; i -=  2) {
+			digit = parseInt(HPIIstring.substring(i, i + 1));
+			thisSum += digit;
+		}
+		checkSum = ((thisSum * 9) % 10);
+		HPIIstring += checkSum.toString();
+		var id = id.toString();
+		document.getElementById(id).innerHTML = HPIIstring;
+	}
+}
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate a Hospital PBS Provider Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate a Hospital PBS Provider Number</h1>
+
+<h3>Enter a Hospital PBS Provider number, then hit Submit to get it validated</h3>
+<form name="HospitalPrescriberNumberForm" >
+	<label for="formInput">Hospital PBS Prescriber Number:</label><input type="text" id="formInput" name="hospitalPrescriberNumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateHospitalForm()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+var cletter = 'YXWTLKJGHBA';
+function checkHospitalPrescriberNumber(hospitalPrescriberNumber) {
+	var csum = 0;
+	if (hospitalPrescriberNumber.length < 8) {					// check length
+		return "Not enough characters";
+	}
+	if (hospitalPrescriberNumber.length > 8) {					// check length
+		return "Too many characters";
+	}
+	if (Number.isNaN(Number(hospitalPrescriberNumber.substring(0, 7)))) {		// check starts with 7 digits
+		return "Hospital PBS Prescriber number is not a number";
+	}
+	csum = parseInt(hospitalPrescriberNumber.substring(1, 2)) * 5;
+	csum += parseInt(hospitalPrescriberNumber.substring(2, 3)) * 8;
+	csum += parseInt(hospitalPrescriberNumber.substring(3, 4)) * 4;
+	csum += parseInt(hospitalPrescriberNumber.substring(4, 5)) * 2;
+	csum += parseInt(hospitalPrescriberNumber.substring(5, 6));
+	csum += parseInt(hospitalPrescriberNumber.substring(6, 7)) * 6;
+	csum %= 11;
+	if (cletter.substring(csum, csum + 1) != hospitalPrescriberNumber.substring(7,8)) {
+		return "Invalid checksum letter";
+	}
+	return "";
+}
+
+
+function validateHospitalForm() {
+	document.getElementById("validation").innerHTML = "Called";
+	var hospitalPrescriberNumber = document.forms["HospitalPrescriberNumberForm"]["hospitalPrescriberNumber"].value;
+	var valid = checkHospitalPrescriberNumber(hospitalPrescriberNumber);
+	if (valid == "") {
+		document.getElementById("validation").innerHTML = "Is Valid";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

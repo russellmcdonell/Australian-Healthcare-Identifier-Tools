@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate a Patient IHI Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate a Patient IHI Number</h1>
+
+<h3>Enter a Patient IHI Number, then hit Submit to get it validated</h3>
+<h4>Must be 16 digits</h4>
+<form name="PatientIHINumberForm" >
+	<label for="formInput">Patient IHI Number:</label><input type="text" id="formInput" name="patientIHINumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateIHIForm()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+function checkPatientIHINumber(patientIHINumber) {
+	if (patientIHINumber.length < 16) {					// check length
+		return "Not enough characters";
+	}
+	if (patientIHINumber.length > 16) {					// check length
+		return "Too many characters";
+	}
+	if (Number.isNaN(Number(patientIHINumber))) {							// check starts with 10 digits
+		return "IHI number is not a number";
+	}
+	if (patientIHINumber.substring(0, 6) != "800360") {
+		return "Invalid initial digits - not 800360";
+	}
+	var thisSum = 0;
+	for(var i = 14; i > -1; i -= 2) {
+		digit = parseInt(patientIHINumber.substring(i, i + 1)) * 2;
+		thisSum += Math.trunc(digit / 10);
+		thisSum += digit  % 10;
+	}
+	for(var i = 13; i > -1; i -=  2) {
+		digit = parseInt(patientIHINumber.substring(i, i + 1));
+		thisSum += digit;
+	}
+	checkSum = ((thisSum * 9) % 10);
+	if (checkSum != parseInt(patientIHINumber.substring(15, 16))) {
+		return "Invalid checksum digit";
+	}
+	return "";
+}
+
+
+function validateIHIForm() {
+	var patientIHINumber = document.forms["PatientIHINumberForm"]["patientIHINumber"].value;
+	var valid = checkPatientIHINumber(patientIHINumber);
+	if (valid == "") {
+		document.getElementById("validation").innerHTML = "Is Valid";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

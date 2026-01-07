@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Generate Provider APRA Registration Numbers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body onload="makeProviderAPRAnumbers()">
+<h1>Generate Provider APRA Registration Numbers</h1>
+
+<table>
+	<tr><th>Provider APRA Registration Numbers</th></tr>
+	<tr><td id="0"></td></tr>
+	<tr><td id="1"></td></tr>
+	<tr><td id="2"></td></tr>
+	<tr><td id="3"></td></tr>
+	<tr><td id="4"></td></tr>
+	<tr><td id="5"></td></tr>
+	<tr><td id="6"></td></tr>
+	<tr><td id="7"></td></tr>
+	<tr><td id="8"></td></tr>
+	<tr><td id="9"></td></tr>
+</table>
+
+<script>
+
+
+const APRAprofession = {
+	ATS: "ATSI Health Practice",
+	CMR: "Chinese Medicine",
+	CHI: "Chiropractic",
+	DEN: "Dental",
+	MED: "Medical",
+	MRP: "Medical Radiation Practice",
+	NMW: "Nursing and Midwifery",
+	OCC: "Occupational Therapy",
+	OPT: "Optometry",
+	OST: "Osteopathy",
+	PHA: "Pharmacy",
+	PHY: "Physiotherapy",
+	POD: "Podiatry",
+	PSY: "Psychology"
+};
+const APRAprofessionKey = Object.keys(APRAprofession);
+function makeProviderAPRAnumbers() {
+	for (var id = 0; id < 10; id++) {
+		var APRAcode = Math.random() * APRAprofessionKey.length;
+		APRAcode = Math.trunc(APRAcode);
+		var APRAnumber = Math.random() * 1000000000;
+		APRAnumber = Math.trunc(APRAnumber);
+		var numberString = "000000000" + APRAnumber.toString();
+		var APRAstring = APRAprofessionKey[APRAcode] + numberString.slice(-10);
+		var id = id.toString();
+		document.getElementById(id).innerHTML = APRAstring;
+	}
+}
+
+
+
+</script>
+
+</body>
+</html>

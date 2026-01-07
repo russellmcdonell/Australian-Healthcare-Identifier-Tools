@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Validate an Organisation HPI-O Number</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body>
+<h1>Validate an Organisation HPI-O Number</h1>
+
+<h3>Enter an Organisation HPI-O Number, then hit Submit to get it validated</h3>
+<h4>Must be 16 digits</h4>
+<form name="OrganisationHPIONumberForm" >
+	<label for="formInput">Organisation HPI-O Number:</label><input type="text" id="formInput" name="organisationHPIONumber">
+	<label for="formSubmit"></label><input type="button" id="formSubmit" value="Submit" onclick="validateHPIOForm()">
+</form>
+
+<h3>Report</h3>
+<p id="validation"></p>
+
+<script>
+
+
+function checkOrganisationHPIONumber(organisationHPIONumber) {
+	if (organisationHPIONumber.length < 16) {					// check length
+		return "Not enough characters";
+	}
+	if (organisationHPIONumber.length > 16) {					// check length
+		return "Too many characters";
+	}
+	if (Number.isNaN(Number(organisationHPIONumber))) {							// check starts with 10 digits
+		return "HPI-O number is not a number";
+	}
+	if (organisationHPIONumber.substring(0, 6) != "800362") {
+		return "Invalid initial digits - not 800362";
+	}
+	var thisSum = 0;
+	for(var i = 14; i > -1; i -= 2) {
+		digit = parseInt(organisationHPIONumber.substring(i, i + 1)) * 2;
+		thisSum += Math.trunc(digit / 10);
+		thisSum += digit  % 10;
+	}
+	for(var i = 13; i > -1; i -=  2) {
+		digit = parseInt(organisationHPIONumber.substring(i, i + 1));
+		thisSum += digit;
+	}
+	checkSum = ((thisSum * 9) % 10);
+	if (checkSum != parseInt(organisationHPIONumber.substring(15, 16))) {
+		return "Invalid checksum digit";
+	}
+	return "";
+}
+
+
+function validateHPIOForm() {
+	var organisationHPIONumber = document.forms["OrganisationHPIONumberForm"]["organisationHPIONumber"].value;
+	var valid = checkOrganisationHPIONumber(organisationHPIONumber);
+	if (valid == "") {
+		document.getElementById("validation").innerHTML = "Is Valid";
+	} else {
+		document.getElementById("validation").innerHTML = "Is Not Valid: " + valid;
+	}
+}
+
+</script>
+
+</body>
+</html>

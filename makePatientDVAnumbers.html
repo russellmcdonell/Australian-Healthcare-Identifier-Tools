@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Generate Patient DVA Numbers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body onload="makePatientDVAnumbers()">
+<h1>Generate Patient DVA Numbers</h1>
+
+
+<table>
+	<tr><th>Patient DVA Number</th></tr>
+	<tr><td id="0"></td></tr>
+	<tr><td id="1"></td></tr>
+	<tr><td id="2"></td></tr>
+	<tr><td id="3"></td></tr>
+	<tr><td id="4"></td></tr>
+	<tr><td id="5"></td></tr>
+	<tr><td id="6"></td></tr>
+	<tr><td id="7"></td></tr>
+	<tr><td id="8"></td></tr>
+	<tr><td id="9"></td></tr>
+</table>
+
+<script>
+
+
+const states = "NVQWST";
+const war1 = ["A", "N", "P", "V", "X"];
+const war2 = ["CN", "ET", "FR", "FW", "GR", "GW", "IQ", "IT", "IV", "JA", "KM", "KO", "MO", "NF", "NG", "NK", "NX", "PK", "PO", "PX", "RD", "RM", "RU", "SA", "SE", "SL", "SM", "SO", "SR", "SS", "UB", "US", "YU"];
+const war3 = ["AFG", "AGX", "ALX", "ARG", "ARX", "BAG", "BAL", "BCG", "BGG", "BGK", "BGX", "BRX", "BUG", "BUR", "BUX", "CAM", "CCG", "CHX", "CIX", "CLK", "CNK", "CNS", "CNX", "CON", "CYP", "CZG", "CZX", "DEG", "DNK", "DNX", "EGG", "EGX", "EGY", "ESX", "ETK", "ETX", "FIJ", "FIX", "FRG", "FRK", "FRX", "GHA", "GRE", "GRG", "GRK", "GRX", "HKS", "HKX", "HLG", "HLK", "HLX", "HUX", "IDA", "IND", "ISR", "ITG", "ITK", "ITX", "KOS", "KSH", "KUG", "KYA", "LAX", "LBX", "LXK", "MAL", "MAR", "MAU", "MLS", "MOG", "MTX", "MWI", "NBA", "NCG", "NGR", "NIG", "NRD", "NSM", "NSS", "NSW", "NWG", "NWK", "NWX", "OMG", "PAD", "PAG", "PAL", "PAM", "PAX", "PCA", "PCG", "PCR", "PCV", "PHK", "PHS", "PHX", "PLG", "PLX", "PMS", "PSM", "PSW", "PWO", "QAG", "RDX", "RUG", "RUX", "SAG", "SAX", "SCG", "SEG", "SIN", "SPG", "SUD", "SWK", "SWP", "SYG", "SYR", "SYX", "THK", "THS", "TRG", "TRK", "TZA", "UAG", "URX", "USG", "USK", "USS", "USX", "VEX", "VNS", "YEM", "YGX", "ZIM"];
+const warLink = [" ", "A", "B", "C", "D"];
+function makePatientDVAnumbers() {
+	for (var i = 0; i < 10; i++) {
+		var DVAstate = Math.random() * states.length;
+		DVAstate = Math.trunc(DVAstate);
+		var stateChar = states[DVAstate];
+		var war = Math.random() * 3;
+		war = 1 + Math.trunc(war);
+		if (war == 1) {
+			var warCode = Math.random() * war1.length;
+			var warCode = Math.trunc(warCode);
+			var DVAstring = stateChar + war1[warCode];
+			var DVAnumber = Math.random() * 1000000;
+			DVAnumber = Math.trunc(DVAnumber);
+			var numberString = "000000" + DVAnumber.toString();
+			numberString = numberString.slice(-6);
+			DVAstring += numberString;
+		} else if (war == 2) {
+			var warCode = Math.random() * war2.length;
+			var warCode = Math.trunc(warCode);
+			var DVAstring = stateChar + war2[warCode];
+			var DVAnumber = Math.random() * 100000;
+			DVAnumber = Math.trunc(DVAnumber);
+			var numberString = "00000" + DVAnumber.toString();
+			numberString = numberString.slice(-5);
+			DVAstring += numberString;
+		} else {
+			var warCode = Math.random() * war3.length;
+			var warCode = Math.trunc(warCode);
+			var DVAstring = stateChar + war3[warCode];
+			var DVAnumber = Math.random() * 10000;
+			DVAnumber = Math.trunc(DVAnumber);
+			var numberString = "0000" + DVAnumber.toString();
+			numberString = numberString.slice(-4);
+			DVAstring += numberString;
+		}
+		var link = Math.random() * warLink.length;
+		link = Math.trunc(link);
+		if (warLink[link] == " ") {
+			DVAstring += "&nbsp;"
+		} else {
+			DVAstring += warLink[link];
+		}
+		var id = i.toString();
+		document.getElementById(id).innerHTML = DVAstring;
+	}
+}
+
+
+</script>
+
+</body>
+</html>

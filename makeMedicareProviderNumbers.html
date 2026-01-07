@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Generate Medicare Provider Numbers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
+</head>
+<body onload="makeMedicareProviderNumbers()">
+<h1>Generate Medicare Provider Numbers</h1>
+
+
+<table>
+	<tr><th>Medicare Provider Number</th></tr>
+	<tr><td id="0"></td></tr>
+	<tr><td id="1"></td></tr>
+	<tr><td id="2"></td></tr>
+	<tr><td id="3"></td></tr>
+	<tr><td id="4"></td></tr>
+	<tr><td id="5"></td></tr>
+	<tr><td id="6"></td></tr>
+	<tr><td id="7"></td></tr>
+	<tr><td id="8"></td></tr>
+	<tr><td id="9"></td></tr>
+</table>
+
+
+<script>
+
+
+var checkCharacters = "YXWTLKJHFBA";
+var locationCharacters = "0123456789ABCDEFGHJKLMNPQRTUVWXY";
+function makeMedicareProviderNumbers() {
+	for (var i = 0; i < 10; i++) {
+		var medicareNumber = Math.random() * 1000000;
+		medicareNumber = Math.trunc(medicareNumber);
+		var medicareString = medicareNumber.toString();
+		medicareString = "000000" + medicareString;
+		medicareString = medicareString.slice(-6);
+		var location = Math.random();
+		location = Math.pow(location, 2);
+		location = Math.trunc(location * 32);
+		locationChar = locationCharacters[location];
+		var checkSum = parseInt(medicareString.substring(0, 1)) * 3;
+		checkSum += parseInt(medicareString.substring(1, 2)) * 5;
+		checkSum += parseInt(medicareString.substring(2, 3)) * 8;
+		checkSum += parseInt(medicareString.substring(3, 4)) * 4;
+		checkSum += parseInt(medicareString.substring(4, 5)) * 2;
+		checkSum += parseInt(medicareString.substring(5, 6));
+		checkSum += location * 6;
+		checkSum %= 11;
+		medicareString = medicareString + locationChar + checkCharacters[checkSum];
+		var id = i.toString();
+		document.getElementById(id).innerHTML = medicareString;
+	}
+
+}
+
+</script>
+
+</body>
+</html>
